@@ -5,79 +5,79 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 
-const arr = [
-  {
-      id: 1,
-      name: 'Cemento Holcim',
-      category: 'Corralon',
-      last_price: {
-        price: 4.3,
-        date: '20/09/2023'
-      },
-      best_price: {
-        price: 3.5,
-        date: '20/09/2021'
-      },
-      avg_price: 4.0
-  },
-  {
-      id: 2,
-      name: 'Hercal Holcim',
-      category: 'Corralon',
-      last_price: {
-        price: 4.3,
-        date: '20/09/2023'
-      },
-      best_price: {
-        price: 3.5,
-        date: '20/09/2021'
-      },
-      avg_price: 4.0
-  },
-  {
-      id: 3,
-      name: 'Hierro 4.2',
-      category: 'Corralon',
-      last_price: {
-        price: 4.3,
-        date: '20/09/2023'
-      },
-      best_price: {
-        price: 3.5,
-        date: '20/09/2021'
-      },
-      avg_price: 4.0
-  },
-  {
-      id: 4,
-      name: 'Hierro 6',
-      category: 'Otros',
-      last_price: {
-        price: 4.3,
-        date: '20/09/2023'
-      },
-      best_price: {
-        price: 3.5,
-        date: '20/09/2021'
-      },
-      avg_price: 4.0
-  },
-  {
-      id: 5,
-      name: 'Hierro 8',
-      category: 'Plomeria',
-      last_price: {
-        price: 4.3,
-        date: '20/09/2023'
-      },
-      best_price: {
-        price: 3.5,
-        date: '20/09/2021'
-      },
-      avg_price: 4.0
-  },
+// const arr = [
+//   {
+//       id: 1,
+//       name: 'Cemento Holcim',
+//       category: 'Corralon',
+//       last_price: {
+//         price: 4.3,
+//         date: '20/09/2023'
+//       },
+//       best_price: {
+//         price: 3.5,
+//         date: '20/09/2021'
+//       },
+//       avg_price: 4.0
+//   },
+//   {
+//       id: 2,
+//       name: 'Hercal Holcim',
+//       category: 'Corralon',
+//       last_price: {
+//         price: 4.3,
+//         date: '20/09/2023'
+//       },
+//       best_price: {
+//         price: 3.5,
+//         date: '20/09/2021'
+//       },
+//       avg_price: 4.0
+//   },
+//   {
+//       id: 3,
+//       name: 'Hierro 4.2',
+//       category: 'Corralon',
+//       last_price: {
+//         price: 4.3,
+//         date: '20/09/2023'
+//       },
+//       best_price: {
+//         price: 3.5,
+//         date: '20/09/2021'
+//       },
+//       avg_price: 4.0
+//   },
+//   {
+//       id: 4,
+//       name: 'Hierro 6',
+//       category: 'Otros',
+//       last_price: {
+//         price: 4.3,
+//         date: '20/09/2023'
+//       },
+//       best_price: {
+//         price: 3.5,
+//         date: '20/09/2021'
+//       },
+//       avg_price: 4.0
+//   },
+//   {
+//       id: 5,
+//       name: 'Hierro 8',
+//       category: 'Plomeria',
+//       last_price: {
+//         price: 4.3,
+//         date: '20/09/2023'
+//       },
+//       best_price: {
+//         price: 3.5,
+//         date: '20/09/2021'
+//       },
+//       avg_price: 4.0
+//   },
 
-]
+// ]
 
 type SupplyStat = {
   id_supply: number,
@@ -93,7 +93,7 @@ type SupplyStat = {
   min_price: string | number,
   most_recent_dolar_price: string | number,
   date_of_max_price: string | Date,
-  date_of_min_price: string | Date,
+  date_of_min_price: string ,
 }
 
 const HomeView = () => {

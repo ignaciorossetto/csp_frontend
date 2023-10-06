@@ -21,11 +21,17 @@ ChartJS.register(
   Legend
 );
 
+type LineChartPropsType = {
+  suppliesDate: []; 
+  suppliesPrice: number[]; 
+  name: string;
+};
 
-const LineChart = (props) => {
 
-    const [labels, setLabels] = useState([])
-    const [materialDataSet, setMaterialDataSet] = useState([])
+const LineChart : React.FC<LineChartPropsType> = (props) => {
+
+    const [labels, setLabels] = useState<[]>([])
+    const [materialDataSet, setMaterialDataSet] = useState<number[]>([])
 
     useEffect(()=>{
         setLabels(props.suppliesDate)

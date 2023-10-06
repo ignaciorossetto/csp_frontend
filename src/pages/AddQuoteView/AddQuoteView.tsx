@@ -2,19 +2,30 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 type formType = {
   object_id: string | number;
-  id_supply: string | number | null;
-  id_supplier: string | number | null;
-  price: string | number | null;
-  dolar_rate: string | number | null;
-  supply_dolar_price: string | number | null;
-  date: string | number | null;
+  id_supply: number | null;
+  id_supplier: number | null;
+  price: number | null;
+  dolar_rate: number | null;
+  supply_dolar_price: number | null;
+  date: number | null;
 };
+
+type SupplyItemType = {
+  id_supply: number; // Change the type to match your data type
+  name: string; // Change the type to match your data type
+}
+
+type SupplierItemType = {
+  id_supplier: number; // Change the type to match your data type
+  name: string; // Change the type to match your data type
+}
+
 
 const newRow: formType = {
   object_id: Math.random(),
@@ -23,7 +34,7 @@ const newRow: formType = {
   price: null,
   dolar_rate: null,
   supply_dolar_price: null,
-  date: "",
+  date: NaN,
 };
 
 const AddQuoteView = () => {
@@ -36,11 +47,11 @@ const AddQuoteView = () => {
       price: null,
       dolar_rate: null,
       supply_dolar_price: null,
-      date: "",
+      date: NaN,
     },
   ]);
-  const [supplyArray, setSupplyArray] = useState([]);
-  const [supplierArray, setSupplierArray] = useState([]);
+  const [supplyArray, setSupplyArray] = useState<SupplyItemType[]>([]);
+  const [supplierArray, setSupplierArray] = useState<SupplierItemType[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(false);
   const [loadingError, setLoadingError] = useState(false)
 
@@ -62,27 +73,31 @@ const AddQuoteView = () => {
     fetchSelectInfo();
   }, []);
 
-  const handleInputsChange = (e) => {
+  const handleInputsChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const obj_id = parseFloat(e.target.id.split("-")[2]);
     const index = formRows.findIndex((i) => i.object_id === obj_id);
     setFormRows((prev) => {
       const updatedFormRows = [...prev];
-      updatedFormRows[index][e.target.name] = e.target.value;
+      updatedFormRows[index] = {
+        ...updatedFormRows[index],
+        [e.target.name]: e.target.value,
+      };
       return updatedFormRows;
     });
   };
 
-  const handleSubmitForm = async(e: any) => {
-    e.preventDefault();
+  const handleSubmitForm = async(event: FormEvent) => {
+    event.preventDefault();
     const obj = formRows.map((e) => {
     const {object_id, ...other} = e
-      other.id_supply = parseFloat(other.id_supply);
-      other.id_supplier = parseFloat(other.id_supplier);
-      other.price = parseFloat(other.price);
-      other.dolar_rate = parseFloat(other.dolar_rate);
-      other.supply_dolar_price = parseFloat(other.price) / parseFloat(other.dolar_rate);
+      other.id_supply = Number(other.id_supply);
+      other.id_supplier = Number(other.id_supplier);
+      other.price = Number(other.price);
+      other.dolar_rate = Number(other.dolar_rate);
+      other.supply_dolar_price = (other.price) / (other.dolar_rate);
       return other
     });
+    console.log(obj)
     try {
         await axios.post('http://localhost:8000/api/v1/quotes', obj)
         Swal.fire({
@@ -107,10 +122,9 @@ const AddQuoteView = () => {
         })
         setFormRows([newRow])
     }
-    console.log(formRows);
   };
 
-  const deleteRow = (id) => {
+  const deleteRow = (id: number) => {
     if (formRows.length === 1) {
       return
     }
@@ -185,7 +199,7 @@ const AddQuoteView = () => {
               </tr>
             </thead>
             <tbody className="bg-cyan-900 dark:bg-slate-800 text-black font-medium [&>tr]:duration-150 ">
-              {formRows?.map((row: any, index: number) => {
+              {formRows?.map((row: formType, index: number) => {
                 return (
                   <tr
                     key={row.object_id}
@@ -210,7 +224,7 @@ const AddQuoteView = () => {
                     <td className="border-b border-slate-100 dark:border-slate-700 p-4 pr-8  dark:text-slate-400 w-[200px] md:w-auto text-sm lg:text-[18px]">
                       <select
                         required
-                        defaultValue={row.id_supplier}
+                        defaultValue={row.id_supplier || ''}
                         name="id_supplier"
                         className="px-2 py-3 text-center w-[100%]"
                         id={`addSupply-Supplierselect-${row.object_id}`}
@@ -239,7 +253,7 @@ const AddQuoteView = () => {
                       <input
                         required
                         type="number"
-                        value={row.dolar_rate || null}
+                        value={row.dolar_rate || NaN}
                         name="dolar_rate"
                         className=" py-3 w-[80px] text-center"
                         id={`addSupply-dolarRateInput-${row.object_id}`}
@@ -254,8 +268,8 @@ const AddQuoteView = () => {
                       >
                         us${" "}
                         {(
-                          parseFloat(formRows[index].price) /
-                          parseFloat(formRows[index].dolar_rate)
+                          Number(formRows[index].price) /
+                          Number(formRows[index].dolar_rate)
                         ).toFixed(3)}
                       </div>
                     </td>
@@ -276,7 +290,7 @@ const AddQuoteView = () => {
                         color="red"
                         size="xl"
                         cursor={"pointer"}
-                        onClick={() => deleteRow(row.object_id)}
+                        onClick={() => deleteRow(Number(row.object_id))}
                       />
                     </td>
                   </tr>

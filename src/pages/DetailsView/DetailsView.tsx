@@ -29,16 +29,17 @@ type supplyStatsType = {
     id_supply: number,
     min_price: string | number,
     date_of_min_price: string,
-    avg_price: string | number,
+    avg_price: string,
     max_price: string | number,
     date_of_max_price: string,
     most_recent_dolar_price: string | number,
 }
 
+
 const DetailsView = () => {
     const {id} = useParams()
     const [supplyArr, setSupplyArr] = useState<[supplyType] | null>(null)
-    const [suppliesDate,  setSuppliesDate] = useState([])
+    const [suppliesDate,  setSuppliesDate] = useState<[]>([])
     const [suppliesPrice, setsuppliesPrice] = useState([])
     const [supplyStats, setSupplyStats] = useState<[supplyStatsType] | null>(null)
     const [loading, setLoading] = useState(false)
@@ -84,8 +85,8 @@ const DetailsView = () => {
       setLoading(false)
       setSupplyArr(data.payload)
       setSupplyStats(data?.stats)
-      setSuppliesDate(data.payload.map((e)=>e.date.split('T')[0]).reverse())
-      setsuppliesPrice(data.payload.map((e)=>e.supply_dolar_price).reverse())
+      setSuppliesDate(data.payload.map((e: supplyType)=>e.date.split('T')[0]).reverse())
+      setsuppliesPrice(data.payload.map((e: supplyType)=>e.supply_dolar_price).reverse())
     }
     useEffect(()=> {
         fetchSupplyStats()

@@ -7,6 +7,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 type dolarBlueType = { value_avg: number, value_sell: number, value_buy: number }
 
+
 const Header = () => {
     const {pathname} = useLocation()
     const [urlPath, setUrlPath] = useState('')
@@ -14,7 +15,7 @@ const Header = () => {
     const [dolarPriceError, setdolarPriceError] = useState<string | null>(null)
     const [loadingDolarPerDay, setLoadingDolarPerDay] = useState(false)
     const [dolarPerDayDate, setDolarPerDayDate] = useState('')
-    const [dolarPerDatePrice, setDolarPerDatePrice] = useState(null)
+    const [dolarPerDatePrice, setDolarPerDatePrice] = useState<dolarBlueType | null>(null)
 
     useEffect(()=> {
         const fetchDolarPrice = async():Promise<object> => {
@@ -38,9 +39,7 @@ const Header = () => {
     const handleDolarPerDayClick = async() => {
         setLoadingDolarPerDay(true)
         try {
-            console.log(dolarPerDayDate)
             const response = await axios.get(`https://api.bluelytics.com.ar/v2/historical?day=${dolarPerDayDate}`)
-            console.log(response)
             setDolarPerDatePrice(response.data.blue)
             setLoadingDolarPerDay(false)
         } catch (error) {
