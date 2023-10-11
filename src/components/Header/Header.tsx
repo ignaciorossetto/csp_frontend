@@ -55,8 +55,8 @@ const Header = () => {
             <FontAwesomeIcon icon={faBuilding}/> C S P
         </Link>
         <div className="flex gap-5 [&>a]:bg-cyan-700 [&>a]:text-white [&>a]:font-[600] [&>a]:text-[20px] [&>a]:p-2 [&>a:hover]:scale-110 [&>a]:cursor-pointer [&>a]:rounded-lg [&>a]:duration-200">
-            <Link to={'/'}>
-                Materiales
+            <Link to={'/add'}>
+                Nuevo presupuesto
             </Link>
             <Link to={'/'}>
                 Comparar
