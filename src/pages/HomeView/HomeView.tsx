@@ -102,7 +102,7 @@ const HomeView = () => {
   useEffect(()=> {
     const fetchSuppliesStats = async() => {
       setLoading(true)
-      const {data} = await axios.get('http://localhost:8000/api/v1/quotes/stats')
+      const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/quotes/stats`)
       setLoading(false)
       setSuppliesArr(data.message.sort((a:SupplyStat, b:SupplyStat) => a.id_supply - b.id_supply))
     }

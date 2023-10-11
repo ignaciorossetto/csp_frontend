@@ -60,7 +60,7 @@ const AddQuoteView = () => {
       setLoadingOptions(true);
       try {
         const { data } = await axios.get(
-          `http://localhost:8000/api/v1/info/add-quote/select`
+          `${import.meta.env.VITE_BACKEND_URL}/api/v1/info/add-quote/select`
         );
         setLoadingOptions(false);
         setSupplyArray(data.payload.supplies);
@@ -97,9 +97,8 @@ const AddQuoteView = () => {
       other.supply_dolar_price = (other.price) / (other.dolar_rate);
       return other
     });
-    console.log(obj)
     try {
-        await axios.post('http://localhost:8000/api/v1/quotes', obj)
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/quotes`, obj)
         Swal.fire({
             toast: true,
             position: 'top-end',
@@ -134,7 +133,6 @@ const AddQuoteView = () => {
     setFormRows(updatedRows);
   };
   const addRow = () => {
-    console.log(formRows[formRows.length-1]?.price)
     setFormRows([
       ...formRows,
       {

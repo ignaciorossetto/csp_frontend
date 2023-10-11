@@ -5,6 +5,7 @@ import Header from './components/Header/Header'
 import DetailsView from './pages/DetailsView/DetailsView'
 import AddQuoteView from './pages/AddQuoteView/AddQuoteView'
 import LoginView from './pages/LoginView/LoginView'
+import SignUpView from './pages/SignUpView/SignUpView'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path='/material/:id' element={<DetailsView/>}/>
         <Route path='/add' element={<AddQuoteView/>}/>
         <Route path='/login' element={<LoginView/>}/>
+        <Route path='/private/sign-up' element={<SignUpView/>}/>
       </Routes>
     </>
   )

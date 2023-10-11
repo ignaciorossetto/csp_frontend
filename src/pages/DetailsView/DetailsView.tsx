@@ -57,7 +57,7 @@ const DetailsView = () => {
             if (result.isConfirmed) {
                 setLoading(true)
                 try {
-                    const response = await axios.delete(`http://localhost:8000/api/v1/quotes/${quoteId}`)
+                    const response = await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/v1/quotes/${quoteId}`)
                     if (response) {
                         fetchSupplyStats()
                     }
@@ -81,7 +81,7 @@ const DetailsView = () => {
 
     const fetchSupplyStats = async() => {
       setLoading(true)
-      const {data} = await axios.get(`http://localhost:8000/api/v1/quotes/find/${id}`)
+      const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/quotes/find/${id}`)
       setLoading(false)
       setSupplyArr(data.payload)
       setSupplyStats(data?.stats)

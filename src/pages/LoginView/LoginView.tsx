@@ -1,3 +1,4 @@
+import axios from 'axios'
 import {useState, ChangeEvent, FormEvent} from 'react'
 
 const LoginView = () => {
@@ -8,7 +9,12 @@ const LoginView = () => {
 
 const handleLoginSubmitBtn = async(e: FormEvent) => {
   e.preventDefault()
-
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/login`, loginForm);
+    console.log(response)
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 const handleLoginFormInputs = (e:ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +26,7 @@ const handleLoginFormInputs = (e:ChangeEvent<HTMLInputElement>) => {
     <div className='w-full flex justify-center p-10'>
       <form onSubmit={handleLoginSubmitBtn} action="" className='flex flex-col gap-5 p-10 text-[20px] font-[700] shadow-2xl border-[1.5px] border-teal-900 rounded-xl [&>label]:p-3 [&>label]:text-[25px] [&>input]:p-5 [&>input]:border-[2px] [&>input]:border-black'>
         <label htmlFor="">E-mail</label>
-        <input name='email' type="email" />
+        <input name='email' type="email" onChange={handleLoginFormInputs}/>
         <label htmlFor="">Password</label>
         <input name='password' type="password" onChange={handleLoginFormInputs}/>
         <button className='px-10 p-5 bg-teal-900 text-white duration-150 hover:scale-110 '>
