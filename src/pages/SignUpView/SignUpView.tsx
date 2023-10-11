@@ -1,6 +1,6 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { FormEvent, useRef, RefObject, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -57,25 +57,39 @@ const SignUpView = () => {
         title: "Usuario creado correctamente!",
       });
       setLoading(false);
-      // navigate('/')
+      navigate('/')
     } catch (error) {
       console.log(error);
-      if (error.code === "ERR_NETWORK") {
-        Swal.fire({
-          toast: true,
-          position: "top-end",
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          icon: "error",
-          title: "No se pudo crear el usuario... Intenta mas tarde!",
-        });
-        setLoading(false);
-        return;
-      } else if (error.response.status === 404) {
-        setLoading(false);
-        return setError((prev) => ({ ...prev, email: "Email ya existe..." }));
+      if (error instanceof AxiosError) {
+          if (error.code === "ERR_NETWORK") {
+            Swal.fire({
+              toast: true,
+              position: "top-end",
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              icon: "error",
+              title: "No se pudo crear el usuario... Intenta mas tarde!",
+            });
+            setLoading(false);
+            return;
+          } else if (error.response && error.response.status === 404) {
+            setLoading(false);
+            return setError((prev) => ({ ...prev, email: "Email ya existe..." }));
+          }
       }
+      else {
+       return Swal.fire({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            icon: "error",
+            title: "No se pudo crear el usuario... Intenta mas tarde!",
+          });
+      }
+      
     }
   };
 
