@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrashCan } from '@fortawesome/free-regular-svg-icons'
 import LineChart from '../../components/Chart/LineChart'
 import axios from 'axios'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner'
 import Swal from 'sweetalert2'
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 
 type supplyType = {
     id_quote: number,
@@ -96,7 +96,9 @@ const DetailsView = () => {
   return (
     <div className='flex flex-col '>
         {
-            loading ? <FontAwesomeIcon icon={faSpinner} spin className='text-5xl w-full text-center mt-7'/> : 
+            loading ? 
+            <LoadingSpinner classes='text-5xl w-full text-center mt-7'/>
+            : 
             <>
         
             {supplyArr && 

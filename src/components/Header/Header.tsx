@@ -1,14 +1,19 @@
-import { faBuilding } from '@fortawesome/free-regular-svg-icons'
-import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner'
+import {useContext} from 'react'
+import {  faBuilding} from '@fortawesome/free-regular-svg-icons'
+import { faGear } from '@fortawesome/free-solid-svg-icons/faGear'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import { Link, useLocation } from 'react-router-dom'
+import { AuthContext } from '../../context/authContext'
+import { LogoutProcess } from '../../types/types'
+import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 
 type dolarBlueType = { value_avg: number, value_sell: number, value_buy: number }
 
 
 const Header = () => {
+    const { user, dispatch } = useContext(AuthContext)
     const {pathname} = useLocation()
     const [urlPath, setUrlPath] = useState('')
     const [dolarPrice, setDolarPrice] = useState<dolarBlueType | null>(null)
@@ -55,15 +60,38 @@ const Header = () => {
             <FontAwesomeIcon icon={faBuilding}/> C S P
         </Link>
         <div className="flex gap-5 [&>a]:bg-cyan-700 [&>a]:text-white [&>a]:font-[600] [&>a]:text-[20px] [&>a]:p-2 [&>a:hover]:scale-110 [&>a]:cursor-pointer [&>a]:rounded-lg [&>a]:duration-200">
+            {user && <>
+            {user?.active ? <>
             <Link to={'/add'}>
                 Nuevo presupuesto
             </Link>
-            <Link to={'/'}>
-                Comparar
+            {
+                user?.UserType?.title === 'admin' && 
+            <Link to={'/private/settings'}>
+                <FontAwesomeIcon icon={faGear}/>
             </Link>
-            <Link to={'/login'}>
+            }
+                </> :
+                <>
+                <span className='text-[20px] font-[600] p-2'>
+                    Usuario no confirmado
+                </span>
+                    </> 
+                }
+                </>
+                
+                }
+            {
+                !user ? 
+                <Link to={'/login'}>
                 Login
-            </Link>
+            </Link> :
+            <button 
+            onClick={()=>dispatch({type: LogoutProcess.SUCCESS})}
+            className='p-2 bg-red-500 font-[600] text-[20px] rounded-lg hover:scale-110 active:scale-100 duration-150'>
+                Logout
+            </button>
+            }
         </div>
     </div>
     <div className="flex gap-5 p-5 items-center justify-center bg-cyan-800 bg-opacity-50">
@@ -73,7 +101,7 @@ const Header = () => {
         {
             dolarPriceError ? <div>{dolarPriceError}</div> : 
         <div className='text-xl font-medium'>
-            {dolarPrice ? `$${dolarPrice?.value_sell} - $${dolarPrice.value_buy}` : <FontAwesomeIcon icon={faSpinner} spin/>}
+            {dolarPrice ? `$${dolarPrice?.value_sell} - $${dolarPrice.value_buy}` : <LoadingSpinner classes='w-full text-3xl mt-5'/>}
         </div>
 
         }
@@ -117,7 +145,7 @@ const Header = () => {
                     dolarPerDatePrice && 
                     <>
                 {
-                    loadingDolarPerDay ? <FontAwesomeIcon icon={faSpinner} spin size='2xl' className='text-center w-full mt-5'/> : 
+                    loadingDolarPerDay ? <LoadingSpinner classes='w-full text-3xl mt-5'/> : 
                     <div className='w-full mt-5 flex gap-7 justify-center'>
                         <div className='p-3 w-[150px] text-center bg-slate-50 font-semibold text-[18px] shadow-2xl rounded-2xl'>
                             <div>Dolar compra</div>    

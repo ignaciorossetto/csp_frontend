@@ -1,10 +1,10 @@
 import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 type formType = {
   object_id: string | number;
@@ -150,12 +150,7 @@ const AddQuoteView = () => {
   return (
     <div className="my-5">
       {loadingOptions && (
-        <FontAwesomeIcon
-          icon={faSpinner}
-          spin
-          size="2xl"
-          className="w-full text-center text-5xl mt-10"
-        />
+        <LoadingSpinner classes="w-full text-5xl mt-10"/>
       )}
       {!loadingOptions && (
         <>

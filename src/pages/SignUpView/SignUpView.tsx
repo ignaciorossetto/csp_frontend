@@ -1,9 +1,8 @@
-import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios, { AxiosError } from "axios";
 import { FormEvent, useRef, RefObject, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 type SignUpFormErros = {
   password: string | null;
@@ -109,11 +108,7 @@ const SignUpView = () => {
                 [&>label]:text-xl"
       >
         {loading && (
-          <FontAwesomeIcon
-            icon={faSpinner}
-            spin
-            className=" text-5xl self-center"
-          />
+          <LoadingSpinner classes="text-5xl self-center"/>
         )}
         {!loading && (
           <>

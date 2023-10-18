@@ -1,9 +1,12 @@
+import {useContext} from 'react'
 import { faEye, faPlusSquare } from "@fortawesome/free-regular-svg-icons"
-import { faSpinner } from "@fortawesome/free-solid-svg-icons/faSpinner"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
+import { AuthContext } from "../../context/authContext"
+import { AuthContextType } from '../../types/types'
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner'
 
 // const arr = [
 //   {
@@ -97,24 +100,33 @@ type SupplyStat = {
 }
 
 const HomeView = () => {
+  const {user} = useContext<AuthContextType>(AuthContext)
   const [suppliesArr, setSuppliesArr] = useState<[SupplyStat] | null>(null)
   const [loading, setLoading] = useState(false)
+
+  const fetchSuppliesStats = async() => {
+    setLoading(true)
+    const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/quotes/stats`)
+    setLoading(false)
+    setSuppliesArr(data.message.sort((a:SupplyStat, b:SupplyStat) => a.id_supply - b.id_supply))
+  }
   useEffect(()=> {
-    const fetchSuppliesStats = async() => {
-      setLoading(true)
-      const {data} = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/quotes/stats`)
-      setLoading(false)
-      setSuppliesArr(data.message.sort((a:SupplyStat, b:SupplyStat) => a.id_supply - b.id_supply))
+    if (user?.active) {
+      fetchSuppliesStats()
     }
-    fetchSuppliesStats()
-  }, [])
+    if(!user){
+      setSuppliesArr(null)
+    }
+  }, [user])
 
 
 
   return (
     <div>
       {
-        loading ? <FontAwesomeIcon icon={faSpinner} spin className="text-center w-full my-10 text-5xl"/> : 
+        loading ? 
+        <LoadingSpinner classes='text-center w-full my-10 text-5xl'/>
+        : 
       
     <table className="border-collapse table-auto w-full text-md text-center mt-5">
       <thead>
@@ -181,6 +193,9 @@ const HomeView = () => {
       </tbody>
     </table>
     }
+
+    {user && !user?.active && <p className='text-center w-full text-[25px] font-[600] mt-10'>Usuario no confirmado</p>}
+    {!user && <p className='text-center w-full text-[25px] font-[600] mt-10'>Debes iniciar sesion</p>}
     </div>
   )
 }
