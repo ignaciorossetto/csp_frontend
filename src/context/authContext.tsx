@@ -18,7 +18,7 @@ const initialAuthContext: AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>(initialAuthContext)
 
-const AuthReducer: Reducer<AuthState, AuthAction> = (state, action):AuthState => {
+const AuthReducer: Reducer<AuthState, AuthAction> = (_state, action) => {
     switch (action.type) {
         case LoginProcess.START:
             return {
